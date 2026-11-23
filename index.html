@@ -13,16 +13,22 @@
       <button id="live-mode" type="button" aria-pressed="true">Live</button>
       <button id="source-mode" type="button" aria-pressed="false">Source</button>
     </div>
-    <div class="bar-actions" id="bar-actions"><button id="theme" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button></div>
+    <div class="bar-actions" id="bar-actions" aria-label="Document actions">
+      <button id="new-doc" type="button" title="New document">New</button>
+      <button id="open-doc" type="button" title="Open Markdown (Ctrl/⌘ O)">Open</button>
+      <button id="save-doc" type="button" class="save-button" title="Download Markdown (Ctrl/⌘ S)">Save</button>
+      <input id="file-input" type="file" hidden accept=".md,.markdown,.mdown,.mkd,.txt,text/markdown,text/plain">
+      <button id="theme" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button>
+    </div>
   </header>
   <main class="workspace" aria-label="Document workspace">
     <div class="canvas">
-      <div class="eyebrow"><span></span> WRITING SPACE</div>
+      <div class="eyebrow"><span></span> <span id="filename">WRITING SPACE</span></div>
       <div id="editor"></div>
     </div>
   </main>
   <footer class="status-bar">
-    <span id="status">Markdown</span>
+    <span id="status" role="status" aria-live="polite">Markdown</span>
     <span id="metrics" aria-label="Document statistics"></span>
   </footer>
   <script type="module" src="/src/main.js"></script>
