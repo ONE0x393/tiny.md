@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>tiny.md — Markdown editor</title>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="./" aria-label="tiny.md home"><span class="logo" aria-hidden="true">t<span>.</span></span><span>tiny<span class="accent">.</span>md</span></a>
+    <div class="mode-switch" aria-label="Editing mode">
+      <button id="live-mode" type="button" aria-pressed="true">Live</button>
+      <button id="source-mode" type="button" aria-pressed="false">Source</button>
+    </div>
+    <div class="bar-actions" id="bar-actions"><button id="theme" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button></div>
+  </header>
+  <main class="workspace" aria-label="Document workspace">
+    <div class="canvas">
+      <div class="eyebrow"><span></span> WRITING SPACE</div>
+      <div id="editor"></div>
+    </div>
+  </main>
+  <footer class="status-bar">
+    <span id="status">Markdown</span>
+    <span id="metrics" aria-label="Document statistics"></span>
+  </footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
