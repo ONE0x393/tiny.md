@@ -22,8 +22,21 @@
     </div>
   </header>
   <main class="workspace" aria-label="Document workspace">
+    <aside class="outline-panel" id="outline-panel" hidden>
+      <div class="outline-label">OUTLINE</div>
+      <nav id="outline-links" aria-label="Document outline"></nav>
+    </aside>
     <div class="canvas">
       <div class="eyebrow"><span></span> <span id="filename">WRITING SPACE</span></div>
+      <div class="editor-tools" aria-label="Editor controls">
+        <button id="outline-toggle" aria-controls="outline-panel" aria-expanded="false" type="button">Outline</button>
+        <div class="format-buttons" aria-label="Insert Markdown formatting">
+          <button type="button" data-mark="**" title="Bold (Ctrl/⌘ B)" aria-label="Bold"><strong>B</strong></button>
+          <button type="button" data-mark="*" title="Italic (Ctrl/⌘ I)" aria-label="Italic"><em>I</em></button>
+          <button type="button" data-mark="`" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
+          <button type="button" data-mark="~~" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+        </div>
+      </div>
       <div id="editor"></div>
     </div>
   </main>

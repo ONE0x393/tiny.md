@@ -10,3 +10,16 @@
 .bar-actions .save-button{color:var(--accent);background:var(--accent-soft);font-weight:650}
 #status{min-width:0;overflow-wrap:anywhere}#metrics{flex-shrink:0}
 @media(max-width:400px){.bar{grid-template-columns:1fr auto}.mode-switch{grid-row:2;grid-column:1/-1;justify-self:center}.bar-actions{grid-row:1;grid-column:2}}
+.workspace.with-outline{display:grid;grid-template-columns:minmax(170px,235px) minmax(0,1fr)}
+.workspace.with-outline .canvas{width:100%}
+.outline-panel{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem .85rem;color:var(--sub)}
+.outline-label{font:650 .69rem var(--mono);letter-spacing:.16em;margin:0 .45rem .8rem;color:var(--muted)}
+.outline-panel nav{display:grid;gap:.12rem;position:sticky;top:5.95rem}
+.outline-panel button{color:var(--sub);background:transparent;border:0;text-align:left;line-height:1.35;border-radius:5px;padding:.35rem .45rem .35rem calc(.45rem + var(--depth) * .55rem);overflow-wrap:anywhere;font-size:.85rem}
+.outline-panel button:hover{background:var(--accent-soft);color:var(--accent)}
+.outline-panel p{font-size:.84rem;padding:.1rem .45rem}
+.editor-tools{display:flex;justify-content:space-between;gap:.75rem;margin:0 0 1.2rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.editor-tools button{border:0;background:transparent;border-radius:4px;padding:.21rem .52rem;font:.79rem var(--mono);color:var(--sub);min-width:28px;min-height:29px}
+.editor-tools button:hover,.editor-tools button[aria-expanded=true]{color:var(--accent);background:var(--accent-soft)}
+.format-buttons{display:flex;gap:.15rem}
+@media(max-width:700px){.workspace.with-outline{display:block}.outline-panel{border-right:0;border-bottom:1px solid var(--border);max-height:35dvh;overflow:auto;padding:.8rem 1.1rem}.outline-panel nav{position:static}.workspace.with-outline .canvas{padding-top:1.2rem}}
