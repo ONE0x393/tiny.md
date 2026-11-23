@@ -7,7 +7,7 @@ import { GFM } from '@lezer/markdown';
 import { liveMode, liveStyling, setLiveMode } from './live.js';
 import { DEFAULT_FILENAME, downloadName, getDraft, putDraft, readDocument } from './documents.js';
 import { getOutline, wrapSelection, jumpToHeading } from './doc-tools.js';
-import './style.css';
+import { bindFileDrop } from './file-drop.js';
 
 const sample = '# The quiet part of writing\n\nA place for ideas, drafts, and things worth keeping. Write in **Markdown** and see it take shape as you go.\n\n## Try it out\n\n- Edit any line to reveal its Markdown markers.\n- Switch to Source to work with the raw file.\n\n> The best editor disappears when you start writing.\n\n';
 const live = document.querySelector('#live-mode');
@@ -139,12 +139,8 @@ function chooseFile() {
   }
 }
 document.querySelector('#open-doc').addEventListener('click',chooseFile);
-fileInput.addEventListener('change', async () => {
-  const file = fileInput.files?.[0];
-  fileInput.value = '';
-  if (!file) return;
+async function openLocalFile(file, expectedRevision) {
   const sourceGeneration = ++generation;
-  const expectedRevision = openRevision;
   try {
     const doc = await readDocument(file);
     if (sourceGeneration !== generation || (revision !== expectedRevision && !confirmReplace())) return;
@@ -152,6 +148,19 @@ fileInput.addEventListener('change', async () => {
   } catch (e) {
     if(sourceGeneration === generation) setMessage(e.message);
   }
+}
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files?.[0];
+  fileInput.value = '';
+  if (file) void openLocalFile(file, openRevision);
+});
+const dropHint = document.querySelector('#drop-hint');
+bindFileDrop(window, {
+  openFile(file) {
+    if (confirmReplace()) void openLocalFile(file, revision);
+  },
+  reject: setMessage,
+  highlight(active) { dropHint.hidden = !active; }
 });
 function saveDocument() {
   const name = downloadName(documentName);

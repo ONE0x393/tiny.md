@@ -23,3 +23,25 @@
 .editor-tools button:hover,.editor-tools button[aria-expanded=true]{color:var(--accent);background:var(--accent-soft)}
 .format-buttons{display:flex;gap:.15rem}
 @media(max-width:700px){.workspace.with-outline{display:block}.outline-panel{border-right:0;border-bottom:1px solid var(--border);max-height:35dvh;overflow:auto;padding:.8rem 1.1rem}.outline-panel nav{position:static}.workspace.with-outline .canvas{padding-top:1.2rem}}
+
+.drop-hint {
+  position: fixed;
+  z-index: 10;
+  inset: 12px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  border: 2px dashed #479493;
+  border-radius: 14px;
+  background: rgb(52 116 117 / 14%);
+}
+.drop-hint[hidden] { display: none; }
+.drop-hint span {
+  padding: 12px 18px;
+  border-radius: 24px;
+  background: #163f40;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 5px 20px rgb(0 0 0 / 16%);
+}
