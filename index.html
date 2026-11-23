@@ -23,6 +23,13 @@
     </div>
   </header>
   <main class="workspace" aria-label="Document workspace">
+    <aside class="outline-panel explorer-panel" id="explorer-panel" hidden>
+      <div class="outline-label">EXPLORER</div>
+      <button id="open-folder" type="button">Open folder</button>
+      <input id="folder-input" type="file" webkitdirectory multiple hidden>
+      <p id="folder-name" role="status">Open or drop a folder to browse its text files.</p>
+      <nav id="folder-files" aria-label="Folder files"></nav>
+    </aside>
     <aside class="outline-panel" id="outline-panel" hidden>
       <div class="outline-label">OUTLINE</div>
       <nav id="outline-links" aria-label="Document outline"></nav>
@@ -30,7 +37,10 @@
     <div class="canvas">
       <div class="eyebrow"><span></span> <button id="filename" type="button">Untitled.md</button> <input id="filename-input" type="text" aria-label="Document filename" spellcheck="false" autocomplete="off" hidden></div>
       <div class="editor-tools" aria-label="Editor controls">
-        <button id="outline-toggle" aria-controls="outline-panel" aria-expanded="false" type="button">Outline</button>
+        <div class="view-buttons">
+          <button id="explorer-toggle" type="button" aria-controls="explorer-panel" aria-expanded="false">Explorer</button>
+          <button id="outline-toggle" aria-controls="outline-panel" aria-expanded="false" type="button">Outline</button>
+        </div>
         <div class="format-buttons" aria-label="Insert Markdown formatting">
           <button type="button" data-mark="**" title="Bold (Ctrl/⌘ B)" aria-label="Bold"><strong>B</strong></button>
           <button type="button" data-mark="*" title="Italic (Ctrl/⌘ I)" aria-label="Italic"><em>I</em></button>
@@ -45,7 +55,7 @@
     <span id="status" role="status" aria-live="polite">Markdown</span>
     <span id="metrics" aria-label="Document statistics"></span>
   </footer>
-  <div id="drop-hint" class="drop-hint" aria-hidden="true" hidden><span>Drop to open a Markdown file</span></div>
+  <div id="drop-hint" class="drop-hint" aria-hidden="true" hidden><span>Drop a Markdown file or folder</span></div>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

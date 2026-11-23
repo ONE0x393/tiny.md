@@ -8,6 +8,7 @@ import { liveMode, liveStyling, setLiveMode } from './live.js';
 import { DEFAULT_FILENAME, downloadName, getDraft, putDraft, readDocument } from './documents.js';
 import { getOutline, wrapSelection, jumpToHeading } from './doc-tools.js';
 import { bindFileDrop } from './file-drop.js';
+import { fromDroppedFolder, fromFolderPicker, renderFolder } from './explorer.js';
 
 const sample = '# The quiet part of writing\n\nA place for ideas, drafts, and things worth keeping. Write in **Markdown** and see it take shape as you go.\n\n## Try it out\n\n- Edit any line to reveal its Markdown markers.\n- Switch to Source to work with the raw file.\n\n> The best editor disappears when you start writing.\n\n';
 const live = document.querySelector('#live-mode');
@@ -20,6 +21,12 @@ const outline = document.querySelector('#outline-panel');
 const outlineLinks = document.querySelector('#outline-links');
 const outlineToggle = document.querySelector('#outline-toggle');
 const fileInput = document.querySelector('#file-input');
+const explorer = document.querySelector('#explorer-panel');
+const explorerToggle = document.querySelector('#explorer-toggle');
+const folderInput = document.querySelector('#folder-input');
+const folderName = document.querySelector('#folder-name');
+const folderFiles = document.querySelector('#folder-files');
+let folderGeneration = 0;
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const initial = getDraft(storage) ?? {text:sample,name:DEFAULT_FILENAME,dirty:false};
 let documentName = initial.name;
@@ -91,12 +98,17 @@ function makeState(doc) {
 const view = new EditorView({parent:document.querySelector('#editor'),state:makeState(initial.text)});
 renderStatus(view.state);
 setMessage(initial.dirty ? 'Draft restored from this device' : 'Markdown');
-outlineToggle.addEventListener('click', () => {
-  outline.hidden = !outline.hidden;
+function showPanel(panel) {
+  outline.hidden = panel !== outline;
+  explorer.hidden = panel !== explorer;
   outlineToggle.setAttribute('aria-expanded',String(!outline.hidden));
-  document.querySelector('.workspace').classList.toggle('with-outline',!outline.hidden);
+  explorerToggle.setAttribute('aria-expanded',String(!explorer.hidden));
+  document.querySelector('.workspace').classList.toggle('with-outline',!!panel);
   renderOutline(view.state);
-});
+}
+outlineToggle.addEventListener('click', () => showPanel(outline.hidden ? outline : null));
+explorerToggle.addEventListener('click', () => showPanel(explorer.hidden ? explorer : null));
+
 for (const button of document.querySelectorAll('[data-mark]')) {
   button.addEventListener('mousedown',event=>event.preventDefault());
   button.addEventListener('click',()=>{
@@ -174,14 +186,16 @@ function chooseFile() {
   }
 }
 document.querySelector('#open-doc').addEventListener('click',chooseFile);
-async function openLocalFile(file, expectedRevision) {
+async function openLocalFile(source, expectedRevision) {
   const sourceGeneration = ++generation;
   try {
+    const file = typeof source === 'function' ? await source() : source;
+    if (sourceGeneration !== generation) return;
     const doc = await readDocument(file);
     if (sourceGeneration !== generation || (revision !== expectedRevision && !confirmReplace())) return;
     replaceDocument(doc);
   } catch (e) {
-    if(sourceGeneration === generation) setMessage(e.message);
+    if(sourceGeneration === generation) setMessage(e?.message || 'Could not open this file.');
   }
 }
 fileInput.addEventListener('change', () => {
@@ -189,11 +203,40 @@ fileInput.addEventListener('change', () => {
   fileInput.value = '';
   if (file) void openLocalFile(file, openRevision);
 });
+function displayFolder(root) {
+  folderName.textContent = root.name;
+  renderFolder(folderFiles,root,load => {
+    if (confirmReplace()) void openLocalFile(load,revision);
+  });
+  showPanel(explorer);
+}
+function rejectFolder(error) {
+  setMessage(error?.message || 'Could not read this folder. Try Open folder.');
+}
+document.querySelector('#open-folder').addEventListener('click', () => folderInput.click());
+folderInput.addEventListener('change', () => {
+  const files = folderInput.files;
+  if (files?.length) {
+    ++folderGeneration;
+    try { displayFolder(fromFolderPicker(files)); } catch (error) { rejectFolder(error); }
+  }
+  folderInput.value = '';
+});
+async function openDroppedFolder(entry) {
+  const current = ++folderGeneration;
+  try {
+    const root = await fromDroppedFolder(entry,() => current === folderGeneration);
+    if (current === folderGeneration) displayFolder(root);
+  } catch (error) {
+    if (current === folderGeneration) rejectFolder(error);
+  }
+}
 const dropHint = document.querySelector('#drop-hint');
 bindFileDrop(window, {
   openFile(file) {
     if (confirmReplace()) void openLocalFile(file, revision);
   },
+  openFolder: openDroppedFolder,
   reject: setMessage,
   highlight(active) { dropHint.hidden = !active; }
 });

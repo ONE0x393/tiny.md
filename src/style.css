@@ -64,3 +64,15 @@
   border-color: var(--accent);
   outline: 1px solid var(--accent);
 }
+
+.view-buttons{display:flex;flex-wrap:wrap;gap:.15rem}
+.explorer-panel{min-width:0}
+.explorer-panel #open-folder{background:var(--accent-soft);color:var(--accent);margin-inline:.45rem}
+.explorer-panel #folder-name{margin:.8rem 0 .3rem;font-weight:650;overflow-wrap:anywhere}
+.explorer-panel #folder-files{position:static;max-height:65dvh;overflow:auto}
+.explorer-panel ul{list-style:none;padding:0;margin:.1rem 0}
+.explorer-panel ul ul{margin-left:.5rem;padding-left:.35rem;border-left:1px solid var(--border)}
+.explorer-panel summary{cursor:pointer;font-size:.85rem;overflow-wrap:anywhere;padding:.25rem .35rem}
+.explorer-panel summary:hover{color:var(--accent)}
+.explorer-panel #folder-files button{width:100%}
+@media(max-width:700px){.explorer-panel #folder-files{max-height:none}}
