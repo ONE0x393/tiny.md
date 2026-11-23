@@ -15,6 +15,7 @@ const source = document.querySelector('#source-mode');
 const metrics = document.querySelector('#metrics');
 const status = document.querySelector('#status');
 const filename = document.querySelector('#filename');
+const filenameInput = document.querySelector('#filename-input');
 const outline = document.querySelector('#outline-panel');
 const outlineLinks = document.querySelector('#outline-links');
 const outlineToggle = document.querySelector('#outline-toggle');
@@ -39,7 +40,8 @@ function renderStatus(state) {
   const words = doc.trim() ? doc.trim().match(/\S+/gu).length : 0;
   metrics.textContent = words.toLocaleString() + (words === 1 ? ' word' : ' words') + '  /  ' + state.doc.lines + (state.doc.lines === 1 ? ' line' : ' lines');
   filename.textContent = documentName + (dirty ? ' *' : '');
-  filename.title = dirty ? 'Changes not exported' : 'Document name';
+  filename.title = 'Rename ' + documentName + (dirty ? ' (changes not exported)' : '');
+  filename.setAttribute('aria-label', filename.title);
   document.title = documentName + ' — tiny.md';
 }
 function renderOutline(state) {
@@ -113,7 +115,40 @@ function changeMode(useLive, focus = true) {
 live.addEventListener('click', () => changeMode(true));
 source.addEventListener('click', () => changeMode(false));
 
+function finishRename(commit, restoreFocus = false) {
+  if (filenameInput.hidden) return;
+  const next = filenameInput.value.trim() ? downloadName(filenameInput.value) : documentName;
+  filenameInput.hidden = true;
+  filename.hidden = false;
+  if (commit && next !== documentName) {
+    documentName = next;
+    revision++;
+    dirty = true;
+    renderStatus(view.state);
+    persist();
+    setMessage('Renamed to ' + documentName);
+  }
+  if (restoreFocus) filename.focus();
+}
+filename.addEventListener('click', () => {
+  filenameInput.value = documentName;
+  filenameInput.hidden = false;
+  filename.hidden = true;
+  filenameInput.focus();
+  const ext = /\.(md|markdown|mdown|mkd)$/iu.exec(documentName);
+  filenameInput.setSelectionRange(0, ext?.index ?? documentName.length);
+});
+filenameInput.addEventListener('keydown', event => {
+  if (event.isComposing) return;
+  if (event.key === 'Enter' || event.key === 'Escape') {
+    event.preventDefault();
+    finishRename(event.key === 'Enter', true);
+  }
+});
+filenameInput.addEventListener('blur', () => finishRename(true));
+
 function confirmReplace() {
+  finishRename(true);
   return !dirty || window.confirm('Replace this draft? Save first if you want to keep a copy.');
 }
 function replaceDocument(doc) {
@@ -163,6 +198,7 @@ bindFileDrop(window, {
   highlight(active) { dropHint.hidden = !active; }
 });
 function saveDocument() {
+  finishRename(true);
   const name = downloadName(documentName);
   const url = URL.createObjectURL(new Blob([view.state.doc.toString()],{type:'text/markdown;charset=utf-8'}));
   try {

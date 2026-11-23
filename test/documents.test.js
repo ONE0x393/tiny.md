@@ -7,6 +7,10 @@ test('converts plain-text names to safe Markdown downloads',()=>{
   assert.equal(downloadName('guide.markdown'),'guide.markdown');
   assert.equal(downloadName('unsafe/name'),'unsafe-name.md');
   assert.equal(downloadName('..'),'Untitled.md');
+  const long = downloadName('한글'.repeat(160) + '.markdown');
+  assert.match(long,/\.markdown$/);
+  assert.ok(new TextEncoder().encode(long).length <= 240);
+  assert.equal(downloadName(long),long);
 });
 
 test('restores an empty edited draft without substituting the example',()=>{

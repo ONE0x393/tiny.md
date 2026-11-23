@@ -45,3 +45,22 @@
   font-weight: 600;
   box-shadow: 0 5px 20px rgb(0 0 0 / 16%);
 }
+
+#filename,
+#filename-input {
+  font: inherit;
+  font-size: .8rem;
+  letter-spacing: normal;
+  padding: .3rem .44rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+}
+#filename:hover { color: var(--accent); border-color: var(--border); }
+#filename-input {
+  width: min(24rem, 100%);
+  min-width: 0;
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+}

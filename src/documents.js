@@ -3,9 +3,21 @@ export const MAX_BYTES = 5 * 1024 * 1024;
 export const DEFAULT_FILENAME = 'Untitled.md';
 
 export function downloadName(name = DEFAULT_FILENAME) {
-  const clean = name.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-').slice(0, 150);
+  const clean = name.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-');
   if (!clean || clean === '.' || clean === '..') return DEFAULT_FILENAME;
-  return /\.(md|markdown|mdown|mkd)$/iu.test(clean) ? clean : clean.replace(/\.txt$/iu, '') + '.md';
+  const match = /\.(md|markdown|mdown|mkd)$/iu.exec(clean);
+  const ext = match?.[0] ?? '.md';
+  const stem = match ? clean.slice(0, match.index) : clean.replace(/\.txt$/iu, '');
+  const encoder = new TextEncoder();
+  let bytes = ext.length;
+  let short = '';
+  for (const char of stem) {
+    bytes += encoder.encode(char).length;
+    if (bytes > 240) break;
+    short += char;
+  }
+  short = short.trimEnd();
+  return short && short !== '.' && short !== '..' ? short + ext : DEFAULT_FILENAME;
 }
 
 export function getDraft(storage) {
