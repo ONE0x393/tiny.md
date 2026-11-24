@@ -76,3 +76,13 @@
 .explorer-panel summary:hover{color:var(--accent)}
 .explorer-panel #folder-files button{width:100%}
 @media(max-width:700px){.explorer-panel #folder-files{max-height:none}}
+
+.md-rendered-table{position:relative;overflow-x:auto;padding:.25rem 1px .5rem;margin-block:.6rem 1rem;max-width:100%}
+.md-rendered-table table{width:100%;border-collapse:collapse;font: .92rem/1.55 var(--sans)}
+.md-rendered-table th,.md-rendered-table td{padding:.48rem .68rem;border:1px solid var(--border);min-width:5rem;cursor:text}
+.md-rendered-table th{background:var(--rail);font-weight:650}
+.md-rendered-table tbody tr:nth-child(even){background:var(--surface)}
+.md-rendered-table code{font-family:var(--mono);font-size:.88em;background:var(--rail);border-radius:4px;padding:.1em .2em}
+.md-table-edit{display:block;margin:.4rem 0 0 auto;padding:.2rem .45rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--sub);font:.73rem var(--sans)}
+.md-table-edit:hover{color:var(--accent);border-color:var(--accent)}
+.md-table-label{font-style:inherit;color:var(--accent);text-decoration:underline}

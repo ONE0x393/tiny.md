@@ -8,6 +8,7 @@ import { liveMode, liveStyling, setLiveMode } from './live.js';
 import { DEFAULT_FILENAME, downloadName, getDraft, putDraft, readDocument } from './documents.js';
 import { getOutline, wrapSelection, jumpToHeading } from './doc-tools.js';
 import { bindFileDrop } from './file-drop.js';
+import { liveTables } from './tables.js';
 import { fromDroppedFolder, fromFolderPicker, renderFolder } from './explorer.js';
 
 const sample = '# The quiet part of writing\n\nA place for ideas, drafts, and things worth keeping. Write in **Markdown** and see it take shape as you go.\n\n## Try it out\n\n- Edit any line to reveal its Markdown markers.\n- Switch to Source to work with the raw file.\n\n> The best editor disappears when you start writing.\n\n';
@@ -71,12 +72,13 @@ function renderOutline(state) {
   outlineLinks.replaceChildren(list);
 }
 
+const tableStyling = liveTables(liveMode);
 function makeState(doc) {
   return EditorState.create({
     doc,
     extensions: [
       history(), drawSelection(), dropCursor(), highlightSpecialChars(),
-      markdown({extensions: GFM, addKeymap:false}), liveMode, liveStyling,
+      markdown({extensions: GFM, addKeymap:false}), liveMode, liveStyling, tableStyling,
       keymap.of([
         {key:'Mod-b',run:view=>wrapSelection(view,'**')},
         {key:'Mod-i',run:view=>wrapSelection(view,'*')},
