@@ -22,8 +22,8 @@
       <button id="theme" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button>
     </div>
   </header>
-  <main class="workspace" aria-label="Document workspace">
-    <aside class="outline-panel explorer-panel" id="explorer-panel" hidden>
+  <main class="workspace has-panel" aria-label="Document workspace">
+    <aside class="outline-panel explorer-panel" id="explorer-panel">
       <div class="outline-label">EXPLORER</div>
       <button id="open-folder" type="button">Open folder</button>
       <input id="folder-input" type="file" webkitdirectory multiple hidden>
@@ -38,7 +38,7 @@
       <div class="eyebrow"><span></span> <button id="filename" type="button">Untitled.md</button> <input id="filename-input" type="text" aria-label="Document filename" spellcheck="false" autocomplete="off" hidden></div>
       <div class="editor-tools" aria-label="Editor controls">
         <div class="view-buttons">
-          <button id="explorer-toggle" type="button" aria-controls="explorer-panel" aria-expanded="false">Explorer</button>
+          <button id="explorer-toggle" type="button" aria-controls="explorer-panel" aria-expanded="true">Explorer</button>
           <button id="outline-toggle" aria-controls="outline-panel" aria-expanded="false" type="button">Outline</button>
         </div>
         <div class="format-buttons" aria-label="Insert Markdown formatting">

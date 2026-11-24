@@ -105,7 +105,7 @@ function showPanel(panel) {
   explorer.hidden = panel !== explorer;
   outlineToggle.setAttribute('aria-expanded',String(!outline.hidden));
   explorerToggle.setAttribute('aria-expanded',String(!explorer.hidden));
-  document.querySelector('.workspace').classList.toggle('with-outline',!!panel);
+  document.querySelector('.workspace').classList.toggle('has-panel',!!panel);
   renderOutline(view.state);
 }
 outlineToggle.addEventListener('click', () => showPanel(outline.hidden ? outline : null));
